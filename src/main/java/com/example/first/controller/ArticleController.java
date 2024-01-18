@@ -39,7 +39,7 @@ public class ArticleController {
         //2. Repository에게 엔티티를 디비 안에 저장
         Article saved = articleRepository.save(article); //상속 받은 클래스에 save라는 메소드가 있음
         log.info(saved.toString());
-        return "";
+        return "redirect:/articles/" + saved.getId();
     }
 
     @GetMapping("/articles/{id}") //데이터 조회 요청 접수
@@ -60,7 +60,7 @@ public class ArticleController {
         //2. 모델에 데이터 등록하기
         model.addAttribute("articleList", articleEntityList);
         //3. 뷰페이지 설정하기
-        return "Articles/index";
+        return "articles/index";
     }
 }
 
