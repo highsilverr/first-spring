@@ -1,5 +1,9 @@
 package com.example.first.controller;
 
+import com.example.first.dto.CommentDto;
+import com.example.first.entity.Comment;
+import com.example.first.repository.CommentRepository;
+import com.example.first.service.CommentService;
 import org.springframework.ui.Model;
 //import ch.qos.logback.core.model.Model;
 import com.example.first.dto.ArticleForm;
@@ -11,10 +15,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Controller
 @Slf4j //로깅을 위한 어노테이션 문법
@@ -22,6 +30,13 @@ public class ArticleController {
 
     @Autowired //스프링부트가 미리생성해놓은 객체를 가져다가 자동연결 = new 할 필요 x
     private ArticleRepository articleRepository;
+
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private  CommentRepository commentRepository;
+
     @GetMapping("/articles/new")
     public String newArticleForm(){
         return "articles/new";
@@ -48,11 +63,19 @@ public class ArticleController {
         log.info("id = " +id);
         // 1. 아이디를 조회해 데이터 가져오기
         Article articleEntity = articleRepository.findById(id).orElse(null);
+        List<CommentDto> commentsDtos = commentService.comments(id);
         // 2. 모델에 데이터 등록하기
         model.addAttribute("article", articleEntity);
+        model.addAttribute("commentsDtos", commentsDtos);
         // 3. 뷰 페이지 반환하기
         return "articles/show";
     }
+
+//    @PostMapping("/articles/{id}")
+//    public String createComment(@PathVariable Long id, @RequestBody CommentDto dto) {
+//        CommentDto created = commentService.create(id,dto);
+//        return "redirect:/articles/" + created.getId();
+//    }
 
     @GetMapping("/articles")
     public String index(Model model){

@@ -16,6 +16,8 @@ repositories {
 }
 
 dependencies {
+	// mysql 드라이버 추가
+	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation 'org.projectlombok:lombok:1.18.26'
 
 	// 롬복 추가
@@ -27,6 +29,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 }
 
 tasks.named('test') {
